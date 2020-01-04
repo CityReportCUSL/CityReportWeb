@@ -1,0 +1,17 @@
+#mapa{ 
+    position: absolute;
+    top: 8%;
+    left: 1%;
+    right: 1%;
+    bottom: 20%;
+    height: 85%;
+    width: 98%;
+}
+
+.imgCentro
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
