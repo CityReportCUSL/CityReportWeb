@@ -20,7 +20,7 @@
 
 	file_put_contents($path,base64_decode($foto));
 	
-	$sql="INSERT INTO tabla(nombre,foto,Latitud,Longitud) VALUES ('$nombre','$path','$Latitud','$Longitud')";
+	$sql="INSERT INTO reportes(nombre,foto,Latitud,Longitud) VALUES ('$nombre','$path','$Latitud','$Longitud')";
 	ejecutarSQLCommand($sql);
 	
 
