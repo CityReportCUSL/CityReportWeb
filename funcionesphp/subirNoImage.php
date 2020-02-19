@@ -1,9 +1,29 @@
-<?php include ('functions.php');
+<?php include 'config.php';
+	
+	//ESTABLECIMIENTO DE CONEXIÓN
+	$conexion= new mysqli($hostname,$username,$password,$database);
+	if ($conexion->connect_errno) {
+		echo "Falló la conexión a MySQL: (" . $conexion->connect_errno . ") " . $conexion->connect_error;
+	}
+
+	//RECIBIR LOS DATOS DE LA APP
 	$nombre=$_POST['nombre'];
 	$Latitud=$_POST["Latitud"];
 	$Longitud=$_POST["Longitud"];
 
-ejecutarSQLCommand("INSERT INTO  `reportes` (nombre,Latitud,Longitud) VALUES ('$nombre','$Latitud', '$Longitud' ); commit;");
+	//INSERCIÓN EN LA BASE DE DATOS
+	if(!$stmt=$conexion->prepare("INSERT INTO reportes(nombre,Latitud,Longitud) VALUES (?,?,?)"))
+		echo "Falló la preparación de la sentencia";
+	
+	if(!$stmt->bind_param("sss",$nombre,$Latitud,$Longitud))
+		echo "Falló el bindeo de parametros";
+	
+	if($stmt->execute())
+		echo "ok";
+	else echo "error";
 
+	//CIERRE DE CONEXION
+	$stmt->close();
+	mysqli_close($conexion);
 
  ?>

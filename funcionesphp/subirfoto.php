@@ -1,30 +1,38 @@
-<?PHP include ('functions.php');
-
-	include 'conexionbd.php';
-
+<?PHP include 'config.php';
+	//ESTABLECIMIENTO DE CONEXIÓN
+	$conexion = new mysqli($hostname,$username,$password,$database);
+	if ($conexion->connect_errno) {
+		echo "Falló la conexión a MySQL: (" . $conexion->connect_errno . ") " . $conexion->connect_error;
+	}
+	
+	//RECIBIR LOS DATOS DE LA APP
 	$foto = $_POST["foto"];
 	$nombre = $_POST["nombre"];
 	$Latitud=$_POST["Latitud"];
 	$Longitud=$_POST["Longitud"];
-
 	
-	$consulta="SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'cityreport-bd' AND TABLE_NAME = 'reportes'";
+	//OBTENER PRÓXIMO ID A INSERTAR
+	$consulta="SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'cityreportBD' AND TABLE_NAME = 'reportes'";
 	$resultado=mysqli_query($conexion,$consulta);
-	
-	$linea=mysqli_fetch_array($resultado);
-	$id=$linea['AUTO_INCREMENT'];
-
-
+	$linea=mysqli_fetch_assoc($resultado);
+		$id=$linea['AUTO_INCREMENT'];
 	
 	$path = "../uploads/$id.jpg";
-
+	//SUBIR LA IMAGEN AL SERVIDOR
 	file_put_contents($path,base64_decode($foto));
 	
-	$sql="INSERT INTO reportes(nombre,foto,Latitud,Longitud) VALUES ('$nombre','$path','$Latitud','$Longitud')";
-	ejecutarSQLCommand($sql);
-	
+	//INSERCIÓN EN LA BASE DE DATOS
+	if(!$stmt=$conexion->prepare("INSERT INTO `reportes`(nombre,foto,Latitud,Longitud) VALUES (?,?,?,?)"))
+		echo "Falló la preparación de la sentencia";
 
-
+	if(!$stmt->bind_param("ssdd",$nombre,$path,$Latitud,$Longitud))
+		echo "Falló el bindeo de parametros";
 	
+	if($stmt->execute())
+		echo "ok";
+	else echo "error";
+
+	//CIERRE DE CONEXION
+	$stmt->close();
 	mysqli_close($conexion);
 ?>
