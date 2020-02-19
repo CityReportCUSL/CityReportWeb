@@ -1,3 +1,4 @@
 config.php
 *.code-workspace
 .*
+funcionesphp/config.php
