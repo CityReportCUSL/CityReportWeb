@@ -162,10 +162,10 @@ $( document ).ready(function() {
         label: "Finalizados",
         data: finalizadosJS,
         backgroundColor: [
-            "#46BFBD33",
+            "rgba(107, 255, 66, 0.2)",
         ],
         borderColor: [
-            "#5AD3D1",
+            "#82ff47",
         ],
         borderWidth: 2
         }
@@ -184,8 +184,8 @@ $( document ).ready(function() {
     labels: ["Finalizado", "Pendiente", "Revisado"],
     datasets: [{
     data: [<?php echo $finalizado;?>, <?php echo $pendiente;?>, <?php echo $revisado;?>],
-    backgroundColor: [  "#46BFBD","#F7464A","#FDB45C"],
-    hoverBackgroundColor: [ "#5AD3D1","#FF5A5E","#FFC870" ]
+    backgroundColor: [  "#82ff47","#F7464A","#FDB45C"],
+    hoverBackgroundColor: [ "#24ff24","#FF5A5E", "#FFC870"]
     }]
     },
     options: {
@@ -203,8 +203,8 @@ $( document ).ready(function() {
             labels: ["Finalizado", "Pendiente", "Revisado"],
             datasets: [{
             data: [<?php echo $finalizado;?>, <?php echo $pendiente;?>, <?php echo $revisado;?>],
-            backgroundColor: [  "#46BFBD","#F7464A","#FDB45C"],
-            hoverBackgroundColor: [ "#5AD3D1","#FF5A5E","#FFC870" ]
+            backgroundColor: [  "#82ff47","#F7464A","#FDB45C"],
+            hoverBackgroundColor: [ "#24ff24","#FF5A5E", "#FFC870"]
             }]
             },
             options: {
@@ -225,8 +225,8 @@ $( document ).ready(function() {
             datasets: [{
             label: 'Reportes',
             data: [<?php echo $finalizado;?>, <?php echo $pendiente;?>, <?php echo $revisado;?>],
-            backgroundColor: [  "#46BFBD","#F7464A","#FDB45C"],
-            hoverBackgroundColor: [ "#5AD3D1","#FF5A5E","#FFC870" ]
+            backgroundColor: [  "#82ff47","#F7464A","#FDB45C"],
+            hoverBackgroundColor: [ "#24ff24","#FF5A5E", "#FFC870"]
             }]
             },
             options: {
