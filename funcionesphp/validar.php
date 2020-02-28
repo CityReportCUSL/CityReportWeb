@@ -5,8 +5,8 @@
       echo "Failed to connect to MySQL: " . mysqli_connect_error();
    }
 	
-   $email = $_GET['email'];
-   $password = $_GET['password'];
+   $email = $_POST['email'];
+   $password = $_POST['password'];
    $result = mysqli_query($conexion,"SELECT * FROM usuarios where email='$email' and password='$password'");
    $row = mysqli_fetch_array($result);
    $data = $row[0];
