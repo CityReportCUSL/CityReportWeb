@@ -3,9 +3,6 @@
 <?php include 'fragmentos/cabecera.php'?> 
 
     <div class="main-panel">
-
-        
-    
         <nav class="navbar navbar-default navbar-fixed">
                 <div class="container-fluid">
                     <div class="navbar-header">
@@ -21,9 +18,6 @@
                     </div>
                 </div>
             </nav>
-        
-
-
         <div class="content">    
             <div class="container-fluid">
             <div id = 'mapa'></div>
@@ -36,19 +30,51 @@
    
             </div>
         </div>     
-
-       
     <?php include 'fragmentos/pie.php'?> 
-
 </body>
-
-
 </html>
 
 <script>
+    // ICONOS DE LOS MARCADORES SEGUN ESTADO
+    var finalizado = new L.Icon({
+        iconUrl: '/assets/img/marker-icon-2x-green.png',
+        shadowUrl: '/assets/img/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    var revisado = new L.Icon({
+        iconUrl: '/assets/img/marker-icon-2x-orange.png',
+        shadowUrl: '/assets/img/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    var pendiente = new L.Icon({
+        iconUrl: '/assets/img/marker-icon-2x-red.png',
+        shadowUrl: '/assets/img/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41]
+    });
+
+    var seleccionado = new L.Icon({
+	iconUrl: '/assets/img/marker-icon-2x-blue.png',
+	shadowUrl: '/assets/img/marker-shadow.png',
+	iconSize: [25, 41],
+	iconAnchor: [12, 41],
+	popupAnchor: [1, -34],
+	shadowSize: [41, 41]
+});
+
 
     var map = L.map('mapa').
-        setView([37.2655892,-6.9362852],14);
+        setView([37.2655892,-6.9362852],14); //Huelva
     var layer =L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: 'CityReport - Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>'
         }).addTo(map);
@@ -60,6 +86,7 @@
 
     //var layerGroup = L.layerGroup().addTo(map);
     var markersLayer = L.featureGroup().addTo(map);
+
     
 
     
@@ -67,17 +94,17 @@
     {
         
         var zoom = map.getZoom();
-        window.location.href = "http://www.cityreport.ga/mapa.php?v1="+id+"&zoom="+zoom;
-        
     
+        window.location.href = "http://www.cityreport.ga/mapa.php?v1="+id+"&zoom="+zoom+"&marker="+markersLayer.getLayerId(event.target);
         
+
     }
 
-    function cambiarMapa(lat, lon, idP)
+    function cambiarMapa(lat, lon, idP, estado)
     {
         //layerGroup.clearLayers();
-        
-        var marker = L.marker([lat, lon]).addTo(markersLayer).on("click",clickMarker.bind(null,idP));
+
+        var marker = L.marker([lat, lon],{icon: estado}).addTo(markersLayer).on("click",clickMarker.bind(null,idP));
         
         
         // map.setView([lat, lon],16);   
@@ -103,27 +130,32 @@
     $nombre=$mostrar2['nombre'];
     $estado=$mostrar2['estado'];
     $timestamp=$mostrar2['timestamp'];
+
+    $markerId = $_GET["marker"];
+
 ?>
+
 <script>
  $.notify({
         // options
-        message: '<img style="width:100%;height:100%; border-radius: 20px; object-fit: cover;" src="<?php echo $foto ?>"/> <br><h2 style="text-align:center;"><?php echo $nombre ?></h2>',
-        title: '<h2 class="center-block">Reporte ID: <?php echo $id ?></h2><h3>Fecha: <?php echo $timestamp ?></h3><h3>Estado: <?php echo $estado ?></h3>',
+        message: '<img style="width:100%;height:100%; border-radius: 20px; object-fit: cover;" src="<?php echo $foto ?>"> <br><h4 style="text-align:center;"><?php echo $nombre ?></h4>',
+        title: '<h2 class="center-block">Reporte ID: <?php echo $id ?></h2><h4>Fecha: <?php echo $timestamp ?></h4><h4>Estado: <?php echo $estado ?></h4>',
         icon:'' 
     },{
         // settings
-        type: 'danger',
+        type:  '<?php if($estado=="pendiente") echo 'danger'; elseif ($estado=="revisado") echo 'warning'; else echo 'success'; ?>',
         icon_type: 'image',
         delay: 0
 
     });
-    map.setView([<?php echo $Latitud?> ,<?php echo $Longitud?>],<?php echo $zoom ?>);    
- 
+    map.setView([<?php echo $Latitud?> ,<?php echo $Longitud?>],<?php echo $zoom ?>);   //Centrar la vista en el reporte seleccionado
+    
+    
     
 </script> 
 
 <?php
-}
+} //if isset 
 
 ?>
 <?php
@@ -134,8 +166,14 @@ while($mostrar=mysqli_fetch_array($res)){
 
     ?>
     <script>
-    cambiarMapa(<?php echo $mostrar['Latitud'] ?>,<?php echo $mostrar['Longitud'] ?>,<?php echo $mostrar['id'] ?>);
+
+
+    cambiarMapa(<?php echo $mostrar['Latitud'] ?>,<?php echo $mostrar['Longitud'] ?>,<?php echo $mostrar['id'] ?>,<?php echo $mostrar['estado'] ?>);
     </script>
 
 
 <?php } ?>
+
+<script> //Cambiar el color del marcador seleccionado a azul
+     markersLayer.getLayer(<?php echo $markerId ?>).setIcon(seleccionado); 
+</script>
