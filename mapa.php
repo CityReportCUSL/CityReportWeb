@@ -95,7 +95,7 @@
         
         var zoom = map.getZoom();
     
-        window.location.href = "http://www.cityreport.ga/mapa.php?v1="+id+"&zoom="+zoom+"&marker="+markersLayer.getLayerId(event.target);
+        window.location.href = "http://www.cityreport.ga/mapa.php?v1="+id+"&zoom="+zoom;
         
 
     }
@@ -104,12 +104,14 @@
     {
         //layerGroup.clearLayers();
 
-        var marker = L.marker([lat, lon],{icon: estado}).addTo(markersLayer).on("click",clickMarker.bind(null,idP));
+        var marker = L.marker([lat, lon],{icon: estado,idReporte: idP}).addTo(markersLayer).on("click",clickMarker.bind(null,idP));
+        //marker._leaflet_id = idP;
         
         
         // map.setView([lat, lon],16);   
     }
-            
+           
+
 </script>
 
 <?php include 'funcionesphp/conexionbd.php'?>
@@ -121,7 +123,7 @@
    
     $zoom = $_GET["zoom"];
     $id = $_GET["v1"];
-    $consulta2="SELECT * FROM cityreportBD.reportes where id=$id";
+    $consulta2="SELECT * FROM $database.reportes where id=$id";
     $res2=mysqli_query($conexion,$consulta2);
     $mostrar2=mysqli_fetch_array($res2);
     $Latitud=$mostrar2['Latitud'];
@@ -131,11 +133,11 @@
     $estado=$mostrar2['estado'];
     $timestamp=$mostrar2['timestamp'];
 
-    $markerId = $_GET["marker"];
 
 ?>
 
 <script>
+
  $.notify({
         // options
         message: '<img style="width:100%;height:100%; border-radius: 20px; object-fit: cover;" src="<?php echo $foto ?>"> <br><h4 style="text-align:center;"><?php echo $nombre ?></h4>',
@@ -149,9 +151,7 @@
 
     });
     map.setView([<?php echo $Latitud?> ,<?php echo $Longitud?>],<?php echo $zoom ?>);   //Centrar la vista en el reporte seleccionado
-    
-    
-    
+       
 </script> 
 
 <?php
@@ -159,21 +159,31 @@
 
 ?>
 <?php
-$consulta="SELECT * FROM cityreportBD.reportes";
+$consulta="SELECT * FROM $database.reportes";
 $res=mysqli_query($conexion,$consulta);
 
 while($mostrar=mysqli_fetch_array($res)){
 
     ?>
     <script>
-
-
-    cambiarMapa(<?php echo $mostrar['Latitud'] ?>,<?php echo $mostrar['Longitud'] ?>,<?php echo $mostrar['id'] ?>,<?php echo $mostrar['estado'] ?>);
+        cambiarMapa(<?php echo $mostrar['Latitud'] ?>,<?php echo $mostrar['Longitud'] ?>,<?php echo $mostrar['id'] ?>,<?php echo $mostrar['estado'] ?>);
     </script>
-
 
 <?php } ?>
 
-<script> //Cambiar el color del marcador seleccionado a azul
-     markersLayer.getLayer(<?php echo $markerId ?>).setIcon(seleccionado); 
+<script> //Cambiar el color del marcador del reporte seleccionado a azul
+encontrado = false;
+i=0;
+
+while(!encontrado && i<markersLayer.getLayers().length){
+        //alert("Busacando: <?php echo $id?> -> ID: "+markersLayer.getLayers()[i].options.idReporte);
+        if(markersLayer.getLayers()[i].options.idReporte == '<?php echo $id?>'){
+            markersLayer.getLayers()[i].setIcon(seleccionado); 
+            encontrado=true;
+            
+        }
+        i++;
+    }
+
 </script>
+

@@ -61,7 +61,7 @@
                                     	<th class="col-md-2 col-xs-6"><button class="btn btn-outline-light" onclick="ordenar('estado')" >Estado</button></th>
                                     </thead>
                                     <tbody>
-                                        <?php $cont = 76; while($mostrar=mysqli_fetch_array($res)){?> 
+                                        <?php $cont = 92; while($mostrar=mysqli_fetch_array($res)){?> 
                                         <tr onclick="document.location = 'mapa.php?v1=<?php echo $mostrar['id'] ?>&zoom=16&marker=<?php echo $cont?>';"><div class="row">
                                         	<td class="col-md-2 col-xs-4"><img src="<?php echo $mostrar['miniatura'] ?>" style="width:100%;height:100px; border-radius: 10px; object-fit: cover;" ></td>
                                         	<td class="col-md-1 col-xs-2"><?php echo $mostrar['id'] ?></td>

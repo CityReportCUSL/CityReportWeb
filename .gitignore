@@ -1,4 +1,6 @@
 config.php
+*config.php*
 *.code-workspace
 .*
 funcionesphp/config.php
+bfg-1.13.0.jar
