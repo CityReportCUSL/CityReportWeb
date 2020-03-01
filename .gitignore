@@ -4,3 +4,5 @@ config.php
 .*
 funcionesphp/config.php
 bfg-1.13.0.jar
+*.jpg
+funcionesphp/config.php

@@ -61,8 +61,8 @@
                                     </div>
                                     <hr>
                                     <div class="text-center">
-                                        <a href="#" target="blank" class="btn btn-simple" role="button"><i class="fa fa-github"></i>Repositorio Github</a>
-                                        <a href="#" class="btn btn-simple"><i class="fa fa-wordpress" target="blank"></i>Blog</a>
+                                        <a href="https://github.com/CityReportCUSL" target="blank" class="btn btn-simple" role="button"><i class="fa fa-github"></i>Repositorio Github</a>
+                                        <a href="https://cityreport.news.blog/" class="btn btn-simple"><i class="fa fa-wordpress" target="blank"></i>Blog</a>
                                         <a href="mailto:cityreport@outlook.com" class="btn btn-simple"><i class="fa fa-envelope" target="blank"></i>Contacto</a>
                                         
 
