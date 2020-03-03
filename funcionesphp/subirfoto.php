@@ -11,6 +11,8 @@
 	$nombre = $_POST["nombre"];
 	$Latitud=$_POST["Latitud"];
 	$Longitud=$_POST["Longitud"];
+	$autor=$_POST["autor"];
+	
 	
 	//OBTENER PRÓXIMO ID A INSERTAR
 	$consulta="SELECT AUTO_INCREMENT FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'cityreportBD' AND TABLE_NAME = 'reportes'";
@@ -25,10 +27,10 @@
 	
 	
 	//INSERCIÓN EN LA BASE DE DATOS
-	if(!$stmt=$conexion->prepare("INSERT INTO `reportes`(nombre,foto,Latitud,Longitud, miniatura) VALUES (?,?,?,?,?)"))
+	if(!$stmt=$conexion->prepare("INSERT INTO `reportes`(nombre,foto,Latitud,Longitud, miniatura,autor) VALUES (?,?,?,?,?,?)"))
 		echo "Falló la preparación de la sentencia";
 
-	if(!$stmt->bind_param("ssdds",$nombre,$path,$Latitud,$Longitud,$path_min))
+	if(!$stmt->bind_param("ssssss",$nombre,$path,$Latitud,$Longitud,$path_min,$autor))
 		echo "Falló el bindeo de parametros";
 	
 	if(!$stmt->execute())

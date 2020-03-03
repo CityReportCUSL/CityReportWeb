@@ -10,12 +10,13 @@
 	$nombre=$_POST['nombre'];
 	$Latitud=$_POST["Latitud"];
 	$Longitud=$_POST["Longitud"];
+	$autor=$_POST["autor"];
 
 	//INSERCIÓN EN LA BASE DE DATOS
-	if(!$stmt=$conexion->prepare("INSERT INTO reportes(nombre,Latitud,Longitud) VALUES (?,?,?)"))
+	if(!$stmt=$conexion->prepare("INSERT INTO reportes(nombre,Latitud,Longitud,autor) VALUES (?,?,?,?)"))
 		echo "Falló la preparación de la sentencia";
 	
-	if(!$stmt->bind_param("sss",$nombre,$Latitud,$Longitud))
+	if(!$stmt->bind_param("ssss",$nombre,$Latitud,$Longitud,$autor))
 		echo "Falló el bindeo de parametros";
 	
 	if($stmt->execute())

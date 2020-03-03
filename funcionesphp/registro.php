@@ -1,28 +1,39 @@
 <?php include ('conexionbd.php');
-	$nombre=$_GET['nombre'];
-	$email=$_GET['email'];
-	$password=$_GET['password'];
+	$username=$_POST['username'];
+	$email=$_POST['email'];
+	$password=$_POST['password'];
 	
-	$sentencia = $conexion->prepare("SELECT COUNT(*) FROM usuarios where email=?"); //es unico
-	$sentencia->bind_param("s",$email);
-	$sentencia->execute();
+	$sentencia = $conexion->prepare("SELECT COUNT(*) FROM $database.usuarios where email=? OR username=?"); //es unico
+	if(!$sentencia->bind_param("ss",$email,$username)) echo "Error al bindear parametros 1.";
+	if(!$sentencia->execute())
+		echo "Error 1";
 	$resultado = $sentencia->get_result();
 	$row = $resultado->fetch_assoc();
-	$data = $row[0];
-
+	$data = $row['COUNT(*)'];
 	
 	if($data==0){
-		if(!$stmt = $conexion->prepare("INSERT INTO `usuarios` (nombre,email,password) VALUES (?,?,?)");
-		$stmt->bind_param("sss", $nombre, $email, $password);
-		if($stmt->execute())
-			echo "ok";
-		else echo "error";
+		$stmt = $conexion->prepare("INSERT INTO $database.usuarios (username,email,password) VALUES (?,?,?)");
+		if(!$stmt->bind_param("sss", $username, $email, $password)) echo "Error al bindear parametros 2.";
+		if($stmt->execute()){
+			$sentencia = $conexion->prepare("SELECT id FROM $database.usuarios where email=? AND password=?"); //es unico
+			$sentencia->bind_param("ss",$email,$password);
+			$sentencia->execute();
+			$resultado = $sentencia->get_result();
+			$row = $resultado->fetch_assoc();
+			$data = $row['id'];
+		
+		   if($data){
+			  echo $data;
+		   }
+		   echo "ok";
+		}
+		else echo "Error 2";
 		$stmt->close();
 		
 	}
 	else
 	{
-		echo "Ya existe usuario con ese email!";
+		echo "Error 3: Ya existe un usuario con esos datos!";
 	}
 	
 	mysqli_close($conexion);
